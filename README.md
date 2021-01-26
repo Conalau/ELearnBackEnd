@@ -1,5 +1,8 @@
 # ELearnBackEnd
 
+E-learning platform using on back-end C# .NET with Microsoft Entity FrameworkCore for database management.
+
+
 ![catalogues routes](photo1.jpg)
 
 
