@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace E_LearningSite.API.DTOs
+namespace E_LearningSite.API.Models
 {
     public class Course
     {
@@ -15,10 +15,8 @@ namespace E_LearningSite.API.DTOs
         [Required]
         public string Description { get; set; }
         [Required]
-        public List<Document> Documents { get; set; }
-
+        public List<Document> Documents { get; set; }  
         
-        public int SubjectId { get; set; }
         [Required]
         public Subject Subject { get; set; }
     }

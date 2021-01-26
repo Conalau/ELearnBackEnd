@@ -1,10 +1,7 @@
-﻿using E_LearningSite.API.DTOs;
-using E_LearningSite.API.Models;
+﻿using E_LearningSite.API.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace E_LearningSite.API.Controllers
 {
@@ -46,7 +43,7 @@ namespace E_LearningSite.API.Controllers
             }
             Subject subject= new Subject()
             {
-                SubjectType = subjectDTO.SubjectType,
+                Name = subjectDTO.Name
             };
             ICollection<Subject> schoolSubjects = _schoolRepository.GetAllSubjects(schoolId);
             foreach (Subject subj in schoolSubjects)
@@ -72,7 +69,7 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            subject.SubjectType = subjectDTO.SubjectType;
+            _schoolRepository.UpdateSubject(subject, subjectDTO);
             return NoContent();
         }
 
@@ -88,17 +85,19 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            _schoolRepository.GetAllSubjects(schoolId).Remove(subject);
-            // should delete all courses with specific subject
+            _schoolRepository.DeleteSubject(subject, schoolId);
+            // should delete all courses with specific subject ?
             //_schoolRepository.GetAllCourses(schoolId). .ForEach(c => c.ClassMentors.Remove(mentor));
             return NoContent();
         }
 
         // Subjects Types
-        [HttpGet("types")]
+        /*[HttpGet("types")]
         public IActionResult GetTypes()
         {
-            List<EnumValue> subjectTypes = new List<EnumValue>();            
+            return Ok(_schoolRepository.GetAllSubjects());
+
+            *//*List<EnumValue> subjectTypes = new List<EnumValue>();            
             foreach (var element in Enum.GetValues(typeof(SubjectType))) 
             { 
                 subjectTypes.Add(new EnumValue() 
@@ -107,7 +106,7 @@ namespace E_LearningSite.API.Controllers
                     Name = element.ToString(),
                 }); 
             }
-            return Ok(subjectTypes);
-        }
+            return Ok(subjectTypes);*//*
+        }*/
     }
 }

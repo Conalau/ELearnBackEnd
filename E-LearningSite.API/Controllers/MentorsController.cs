@@ -1,4 +1,4 @@
-﻿using E_LearningSite.API.DTOs;
+﻿using E_LearningSite.API.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -64,10 +64,7 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            mentor.Name = personDTO.Name;
-            mentor.Photo = personDTO.Photo;
-            mentor.BirthDate = personDTO.BirthDate;
-            mentor.AccessRights = personDTO.AccessRights;
+            _schoolRepository.UpdateMentor(mentor, personDTO);
             return NoContent();
         }
 
@@ -83,8 +80,7 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            _schoolRepository.GetAllMentors(schoolId).Remove(mentor);
-            _schoolRepository.GetSchool(schoolId).Catalogues.ForEach(c => c.Mentors.Remove(mentor));
+            _schoolRepository.DeleteMentor(mentor, schoolId);
             return NoContent();
         }
     }

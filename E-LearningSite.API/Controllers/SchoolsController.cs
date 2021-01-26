@@ -1,4 +1,4 @@
-﻿using E_LearningSite.API.DTOs;
+﻿using E_LearningSite.API.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -68,13 +68,7 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            school.Name = schoolDTO.Name;
-            school.Photo = schoolDTO.Photo;
-            school.Principal = schoolDTO.Principal;
-            /*school.MentorsList = schoolDTO.MentorsList;
-            school.StudentsList = schoolDTO.StudentsList;
-            school.CoursesList = schoolDTO.CoursesList;
-            school.CataloguesList = schoolDTO.CataloguesList;*/
+            _schoolRepository.UpdateSchool(school, schoolDTO);
             return NoContent();
         }
 
@@ -86,7 +80,7 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            _schoolRepository.GetAllSchools().Remove(school);
+            _schoolRepository.DeleteSchool(school);
             return NoContent();
         }            
 

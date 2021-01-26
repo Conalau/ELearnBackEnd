@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using E_LearningSite.API.DTOs;
+using E_LearningSite.API.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -64,10 +64,7 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            student.Name = personDTO.Name;
-            student.Photo = personDTO.Photo;
-            student.BirthDate = personDTO.BirthDate;
-            student.AccessRights = personDTO.AccessRights;
+            _schoolRepository.UpdateStudent(student, personDTO);
             return NoContent();
         }
 
@@ -83,8 +80,7 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            _schoolRepository.GetAllStudents(schoolId).Remove(student);
-            _schoolRepository.GetSchool(schoolId).Catalogues.ForEach(c => c.Students.Remove(student));
+            _schoolRepository.DeleteStudent(student, schoolId);
             return NoContent();
         }
     }

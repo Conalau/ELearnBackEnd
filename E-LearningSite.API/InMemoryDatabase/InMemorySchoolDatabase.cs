@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace E_LearningSite.API.DTOs
+namespace E_LearningSite.API.Models
 {
     public class InMemorySchoolDatabase : ISchoolRepository
     {
@@ -16,13 +16,13 @@ namespace E_LearningSite.API.DTOs
             {
                 new School()
                 {
-                    Id = 1,
-                    Name = "Weed Health Institute",
+                     Id = 1,
+                    Name = "Harvard",
                     Photo = "school1.jpg",
                     Principal = new Principal()
                     {
                         Id = 1,
-                        Name = "Miss Danger",
+                        Name = "Georgiana Ionescu",
                         Photo = "principal1.jpg",
                         BirthDate = new DateTime(1950, 12, 13),
                         AccessRights = AccessRights.FORPRINCIPALS
@@ -32,7 +32,7 @@ namespace E_LearningSite.API.DTOs
                         new Mentor()
                         {
                             Id = 2,
-                            Name = "Tyrone Shotgun",
+                            Name = "Marcel Popescu",
                             Photo = "mentor11.jpg",
                             BirthDate = new DateTime(1960, 6, 6),
                             AccessRights = AccessRights.FORMENTORS
@@ -40,9 +40,17 @@ namespace E_LearningSite.API.DTOs
                         new Mentor()
                         {
                             Id = 3,
-                            Name = "Johnny 3Fingers",
+                            Name = "Adrian Barbu",
                             Photo = "mentor12.jpg",
                             BirthDate = new DateTime(1970, 1, 4),
+                            AccessRights = AccessRights.FORMENTORS
+                        },
+                        new Mentor()
+                        {
+                            Id = 4,
+                            Name = "Iulain Apostol",
+                            Photo = "mentor13.jpg",
+                            BirthDate = new DateTime(1980, 10, 23),
                             AccessRights = AccessRights.FORMENTORS
                         }
                     },
@@ -51,7 +59,7 @@ namespace E_LearningSite.API.DTOs
                         new Student()
                         {
                             Id = 4,
-                            Name = "Sister Switchblades",
+                            Name = "Elena Diaconescu",
                             BirthDate = new DateTime(1999, 5, 4),
                             Photo = "student11.jpg",
                             AccessRights = AccessRights.FORSTUDENTS
@@ -59,9 +67,17 @@ namespace E_LearningSite.API.DTOs
                         new Student()
                         {
                             Id = 5,
-                            Name = "Jamal Gangsta LeeRoy",
+                            Name = "Costin Constantinescu",
                             Photo = "student12.jpg",
                             BirthDate = new DateTime(2000, 1, 1),
+                            AccessRights = AccessRights.FORSTUDENTS
+                        },
+                        new Student()
+                        {
+                            Id = 6,
+                            Name = "George Iordanescu",
+                            Photo = "student14.jpg",
+                            BirthDate = new DateTime(2000, 3, 17),
                             AccessRights = AccessRights.FORSTUDENTS
                         }
                     },
@@ -70,55 +86,53 @@ namespace E_LearningSite.API.DTOs
                         new Course()
                         {
                             Id = 1,
-                            Name = "Guessing Master of Science",
-                            SubjectId = 3,
-                            Description = "Pay for 1, you get 2",
+                            Name = "Solar System",
+                            Description = "Discover the elements of the solar system",
                             Documents = new List<Document>()
                             {
                                 new Document()
                                 {
                                     Id = 1,
-                                    Name = "Palm Reading doc 1",
-                                    Link = "Palm Reading link 1"
+                                    Name = "Planets of the Solar system",
+                                    Link = "Link 1"
                                 },
                                 new Document()
                                 {
                                     Id = 2,
-                                    Name = "Witchcraft doc 2",
-                                    Link = "Witchcraft link 2"
+                                    Name = "Natural satellites",
+                                    Link = "Link 2"
                                 }
                             },
                             Subject = new Subject
                             {
                                 Id = 3,
-                                SubjectType = SubjectType.ASTRONOMY
+                                Name = "ASTRONOMY"
                             }
                         },
                         new Course()
                         {
                             Id = 2,
-                            Name = "How to Watch Television",
-                            SubjectId = 2,
-                            Description = "For advanced majors",
+                            Name = "OOP",
+                            Description = "Basic elements of OOP",
                             Documents = new List<Document>()
                             {
                                 new Document()
                                 {
                                     Id = 3,
-                                    Name = "Getting dressed doc 1",
-                                    Link = "Getting dressed link 1"
+                                    Name = "Classes and Methods",
+                                    Link = "Link 1"
                                 },
                                 new Document()
                                 {
                                     Id = 4,
-                                    Name = "The art of walking doc 2",
-                                    Link = "The art of walking link 2"
+                                    Name = "Overload and Override",
+                                    Link = "Link 2"
                                 }
                             },
                             Subject = new Subject
                             {
                                 Id = 2,
-                                SubjectType = SubjectType.IT
+                                Name = "IT"
                             }
                         }
                     },
@@ -127,7 +141,7 @@ namespace E_LearningSite.API.DTOs
                         new Catalogue()
                         {
                             Id = 1,
-                            Name = "Steelers Ist Class",
+                            Name = "9th Grade - Mathematic Informatic",
                             Mentors = new List<Mentor>(){},
                             Students = new List<Student>() {},
                             Courses = new List<Course>() {},
@@ -136,7 +150,7 @@ namespace E_LearningSite.API.DTOs
                         new Catalogue()
                         {
                             Id = 2,
-                            Name = "Broncos IIIrd Class",
+                            Name = "10th Grade - Science",
                             Mentors = new List<Mentor>(){},
                             Students = new List<Student>() {},
                             Courses = new List<Course>() {},
@@ -148,29 +162,29 @@ namespace E_LearningSite.API.DTOs
                         new Subject()
                         {
                             Id= 1,
-                            SubjectType = SubjectType.HISTORY
+                            Name = "HISTORY"
                         },
                         new Subject()
                         {
                             Id= 2,
-                            SubjectType = SubjectType.IT
+                            Name = "IT"
                         },
                         new Subject()
                         {
                             Id= 3,
-                            SubjectType = SubjectType.ASTRONOMY
+                            Name = "ASTRONOMY"
                         }
                     }
                 },
                 new School()
                 {
                     Id = 2,
-                    Name = "Universidad Técnica de Buenas Maneras y Pistoleros",
+                    Name = "Oxford",
                     Photo = "school2.jpg",
                     Principal = new Principal()
                     {
                         Id = 6,
-                        Name = "Don Guzman",
+                        Name = "Marian Stanciulescu",
                         Photo = "principal2.jpg",
                         BirthDate = new DateTime(1967, 1, 3),
                         AccessRights = AccessRights.FORPRINCIPALS
@@ -180,7 +194,7 @@ namespace E_LearningSite.API.DTOs
                         new Mentor()
                         {
                             Id = 7,
-                            Name = "Eric Blood Axe",
+                            Name = "Eric Angelescu",
                             Photo = "mentor21.jpg",
                             BirthDate = new DateTime(1964, 4, 16),
                             AccessRights = AccessRights.FORMENTORS
@@ -188,9 +202,17 @@ namespace E_LearningSite.API.DTOs
                         new Mentor()
                         {
                             Id = 8,
-                            Name = "Tommy Machine Gun",
+                            Name = "Emanuel Aramitu",
                             Photo = "mentor22.jpg",
                             BirthDate = new DateTime(1970, 1, 4),
+                            AccessRights = AccessRights.FORMENTORS
+                        },
+                        new Mentor()
+                        {
+                            Id = 8,
+                            Name = "Andrei Pavel",
+                            Photo = "mentor23.jpg",
+                            BirthDate = new DateTime(1966, 7, 25),
                             AccessRights = AccessRights.FORMENTORS
                         }
                     },
@@ -199,7 +221,7 @@ namespace E_LearningSite.API.DTOs
                         new Student()
                         {
                             Id = 9,
-                            Name = "Donna Corason Intenso",
+                            Name = "Diana Petrache",
                             Photo = "student21.jpg",
                             BirthDate = new DateTime(1989, 10, 24),
                             AccessRights = AccessRights.FORSTUDENTS
@@ -207,9 +229,17 @@ namespace E_LearningSite.API.DTOs
                         new Student()
                         {
                             Id = 10,
-                            Name = "The Sleeping Student",
+                            Name = "Dorian Stefan",
                             Photo = "student22.jpg",
                             BirthDate = new DateTime(2001, 10, 21),
+                            AccessRights = AccessRights.FORSTUDENTS
+                        },
+                        new Student()
+                        {
+                            Id = 11,
+                            Name = "Andreea Popescu",
+                            Photo = "student23.jpg",
+                            BirthDate = new DateTime(2000, 9, 30),
                             AccessRights = AccessRights.FORSTUDENTS
                         }
                     },
@@ -218,55 +248,53 @@ namespace E_LearningSite.API.DTOs
                         new Course()
                         {
                             Id = 1,
-                            Name = "Hacking Ethics",
-                            SubjectId = 2,
-                            Description = "2nd edition",
+                            Name = "Cyber Security",
+                            Description = "Basic elements of cyber security",
                             Documents = new List<Document>()
                             {
                                 new Document()
                                 {
                                     Id = 1,
-                                    Name = "Torrent doc 1",
-                                    Link = "Torrent link 1"
+                                    Name = "Malware",
+                                    Link = "Link 1"
                                 },
                                 new Document()
                                 {
                                     Id = 2,
-                                    Name = "Pirating doc 2",
-                                    Link = "Pirating link 2"
+                                    Name = "Data breaches",
+                                    Link = "Link 2"
                                 }
                             },
                             Subject = new Subject()
                             {
                                 Id = 2,
-                                SubjectType = SubjectType.IT
+                                Name = "IT"
                             }
                         },
                         new Course()
                         {
                             Id = 2,
-                            Name = "The Answer to Life, The Universe and Everything",
-                            SubjectId = 1,
-                            Description = "42",
+                            Name = "World Word II",
+                            Description = "The instability created in Europe by the First World War (1914-18) set the stage for another international conflict—World War II",
                             Documents = new List<Document>()
                             {
                                 new Document()
                                 {
                                     Id = 3,
-                                    Name = "Keep searching doc 1",
-                                    Link = "Keep searching link 1"
+                                    Name = "Outbreak of World War II(1939)",
+                                    Link = "Link 1"
                                 },
                                 new Document()
                                 {
                                     Id = 4,
-                                    Name = "Keep searching doc 2",
-                                    Link = "Keep searching link 2"
+                                    Name = "Hitler vs Stalin: Operation Barbosa(1941-1942)",
+                                    Link = "Link 2"
                                 }
                             },
                             Subject = new Subject()
                             {
                                 Id = 1,
-                                SubjectType = SubjectType.HISTORY
+                                Name = "HISTORY"
                             }
                         }
                     },
@@ -275,7 +303,7 @@ namespace E_LearningSite.API.DTOs
                         new Catalogue()
                         {
                             Id = 1,
-                            Name = "Chargers 2nd Class",
+                            Name = "9th Grade - Philosophy",
                             Mentors = new List<Mentor>(){ },
                             Students = new List<Student>() {},
                             Courses = new List<Course>() {},
@@ -287,17 +315,17 @@ namespace E_LearningSite.API.DTOs
                         new Subject()
                         {
                             Id= 1,
-                            SubjectType = SubjectType.HISTORY
+                            Name = "HISTORY"
                         },
                         new Subject()
                         {
                             Id= 2,
-                            SubjectType = SubjectType.IT
+                            Name = "IT"
                         },
                         new Subject()
                         {
                             Id= 3,
-                            SubjectType = SubjectType.ASTRONOMY
+                            Name = "ASTRONOMY"
                         }
                     }
                 }
@@ -322,6 +350,18 @@ namespace E_LearningSite.API.DTOs
             return _schoolDatabase;
         }
 
+        public void UpdateSchool(School school, SchoolDTO schoolDTO)
+        {
+            school.Name = schoolDTO.Name;
+            school.Photo = schoolDTO.Photo;
+            school.Principal = schoolDTO.Principal;
+        }
+
+        public void DeleteSchool(School school)
+        {
+            _schoolDatabase.Remove(school);
+        }
+
         // Mentors
         public Mentor AddMentor(Mentor mentor, int schoolId)
         {
@@ -343,6 +383,20 @@ namespace E_LearningSite.API.DTOs
             return school.Mentors;
         }
 
+        public void UpdateMentor(Mentor mentor, PersonDTO personDTO)
+        {
+            mentor.Name = personDTO.Name;
+            mentor.Photo = personDTO.Photo;
+            mentor.BirthDate = personDTO.BirthDate;
+            mentor.AccessRights = personDTO.AccessRights;
+        }
+        public void DeleteMentor(Mentor mentor, int schoolId)
+        {
+            School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
+            school.Catalogues.ForEach(c => c.Mentors.Remove(mentor));
+            school.Mentors.Remove(mentor);
+        }
+
         // Student
         public Student AddStudent(Student student, int schoolId)
         {
@@ -361,6 +415,19 @@ namespace E_LearningSite.API.DTOs
             School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
             return school.Students;
         }
+        public void UpdateStudent(Student student, PersonDTO personDTO)
+        {
+            student.Name = personDTO.Name;
+            student.Photo = personDTO.Photo;
+            student.BirthDate = personDTO.BirthDate;
+            student.AccessRights = personDTO.AccessRights;
+        }
+        public void DeleteStudent(Student student, int schoolId)
+        {
+            School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
+            school.Catalogues.ForEach(c => c.Students.Remove(student));
+            school.Students.Remove(student);
+        }
 
         // Courses
         public Course AddCourse(Course course, int schoolId)
@@ -370,15 +437,27 @@ namespace E_LearningSite.API.DTOs
             school.Courses.Add(course);
             return course;
         }
+
         public Course GetCourse(int id, int schoolId)
         {
             School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
             return school.Courses.FirstOrDefault(c => c.Id == id);
         }
+
         public ICollection<Course> GetAllCourses(int schoolId)
         {
             School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
             return school.Courses;
+        }
+        public void UpdateCourse(Course course, CourseDTO courseDTO, int schoolId)
+        {
+            course.Name = courseDTO.Name;
+            int subjectId = courseDTO.SubjectId;
+            ICollection<Subject> schoolSubjects = _schoolDatabase
+                .FirstOrDefault(s => s.Id == schoolId).Subjects;
+            Subject subject = schoolSubjects.FirstOrDefault(sbj => sbj.Id == subjectId);
+            course.Subject = subject;
+            course.Description = courseDTO.Description;
         }
 
         // Documents
@@ -403,6 +482,20 @@ namespace E_LearningSite.API.DTOs
             School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
             Course course = school.Courses.FirstOrDefault(c => c.Id == courseId);
             return course.Documents;
+        }
+
+        public void UpdateDocument(Document document, DocumentDTO documentDTO)
+        {
+            document.Name = documentDTO.Name;
+            document.Link = documentDTO.Link;
+        }
+        public void DeleteDocument(Document document, int schoolId, int courseId)
+        {
+            School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
+            Course course = school.Courses.FirstOrDefault(c => c.Id == courseId);
+
+            school.Catalogues.ForEach(cat => cat.Courses.ForEach(cc => cc.Documents.Remove(document)));
+            course.Documents.Remove(document);
         }
 
         // Catalogues
@@ -529,15 +622,28 @@ namespace E_LearningSite.API.DTOs
             school.Subjects.Add(subject);
             return subject;
         }
+
         public Subject GetSubject(int id, int schoolId)
         {
             School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
             return school.Subjects.FirstOrDefault(s => s.Id == id);
         }
+
         public ICollection<Subject> GetAllSubjects(int schoolId)
         {
             School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
             return school.Subjects;
+        }
+
+        public void UpdateSubject(Subject subject, SubjectDTO subjectDTO)
+        {
+            subject.Name = subjectDTO.Name;
+        }
+
+        public void DeleteSubject(Subject subject, int schoolId)
+        {
+            School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
+            school.Subjects.Remove(subject);
         }
 
         // Enums

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using E_LearningSite.API.DTOs;
+using E_LearningSite.API.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -68,12 +68,7 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            course.Name = courseDTO.Name;
-            int subjectId = courseDTO.SubjectId;
-            ICollection<Subject> schoolSubjects = _schoolRepository.GetAllSubjects(schoolId);
-            Subject subject = schoolSubjects.FirstOrDefault(sbj => sbj.Id == subjectId);
-            course.Subject = subject;
-            course.Description = courseDTO.Description;
+            _schoolRepository.UpdateCourse(course, courseDTO, courseId);            
             return NoContent();
         }
 
@@ -94,7 +89,7 @@ namespace E_LearningSite.API.Controllers
             return NoContent();
         }
 
-        // Course Materials
+        // Course Documents
         [HttpGet("{courseId}/documents")]
         public IActionResult GetDocuments(int schoolId, int courseId)
         {
@@ -142,8 +137,7 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            document.Name = documentDTO.Name;
-            document.Link = documentDTO.Link;
+            _schoolRepository.UpdateDocument(document, documentDTO);
             return NoContent();
         }
 
@@ -159,9 +153,7 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            _schoolRepository.GetAllDocuments(schoolId, courseId).Remove(document);
-            _schoolRepository.GetSchool(schoolId).Catalogues.ForEach(
-                c => c.Courses.ForEach(cs => cs.Documents.Remove(document)));
+            _schoolRepository.DeleteDocument(document, schoolId, courseId);
             return NoContent();
         }
     }

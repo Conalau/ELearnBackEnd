@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace E_LearningSite.API.DTOs
+namespace E_LearningSite.API.Models
 {
     public class SubjectDTO
     {
-        public SubjectType SubjectType { get; set; }
+        public string Name { get; set; }
     }
 }
