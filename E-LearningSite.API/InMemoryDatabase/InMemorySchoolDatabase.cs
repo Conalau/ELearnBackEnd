@@ -449,6 +449,7 @@ namespace E_LearningSite.API.Models
             School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
             return school.Courses;
         }
+
         public void UpdateCourse(Course course, CourseDTO courseDTO, int schoolId)
         {
             course.Name = courseDTO.Name;
@@ -458,6 +459,13 @@ namespace E_LearningSite.API.Models
             Subject subject = schoolSubjects.FirstOrDefault(sbj => sbj.Id == subjectId);
             course.Subject = subject;
             course.Description = courseDTO.Description;
+        }
+
+        public void DeleteCourse(Course course, int schoolId)
+        {
+            _schoolDatabase.FirstOrDefault(s => s.Id == schoolId).Courses.Remove(course);
+            _schoolDatabase.FirstOrDefault(s => s.Id == schoolId)
+                .Catalogues.ForEach(c => c.Courses.Remove(course));
         }
 
         // Documents
@@ -506,15 +514,28 @@ namespace E_LearningSite.API.Models
             school.Catalogues.Add(catalogue);
             return catalogue;
         }
+
         public Catalogue GetCatalogue(int id, int schoolId)
         {
             School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
             return school.Catalogues.FirstOrDefault(c => c.Id == id);
         }
+
         public ICollection<Catalogue> GetAllCatalogues(int schoolId)
         {
             School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
             return school.Catalogues;
+        }
+
+        public void UpdateCatalogue(Catalogue catalogue, CatalogueDTO catalogueDTO)
+        {
+            catalogue.Name = catalogueDTO.Name;
+        }
+
+        public void DeleteCatalogue(Catalogue catalogue, int schoolId)
+        {
+            School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
+            school.Catalogues.Remove(catalogue);
         }
 
         // Catalogue Mentors
@@ -528,17 +549,26 @@ namespace E_LearningSite.API.Models
             }
             return mentor;
         }
+
         public Mentor GetCatalogueMentor(int id, int schoolId, int catalogueId)
         {
             School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
             Catalogue catalogue = school.Catalogues.FirstOrDefault(c => c.Id == catalogueId);
             return catalogue.Mentors.FirstOrDefault(m => m.Id == id);
         }
+
         public ICollection<Mentor> GetALLCatalogueMentors(int schoolId, int catalogueId)
         {
             School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
             Catalogue catalogue = school.Catalogues.FirstOrDefault(c => c.Id == catalogueId);
             return catalogue.Mentors;
+        }
+
+        public void DeleteCatalogueMentor(Mentor mentor, int schoolId, int catalogueId)
+        {
+            School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
+            Catalogue catalogue = school.Catalogues.FirstOrDefault(c => c.Id == catalogueId);
+            catalogue.Mentors.Remove(mentor);
         }
 
         // Catalogue Students
@@ -552,17 +582,26 @@ namespace E_LearningSite.API.Models
             }
             return student;
         }
+
         public Student GetCatalogueStudent(int id, int schoolId, int catalogueId)
         {
             School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
             Catalogue catalogue = school.Catalogues.FirstOrDefault(c => c.Id == catalogueId);
             return catalogue.Students.FirstOrDefault(s => s.Id == id);
         }
+
         public ICollection<Student> GetAllCatalogueStudents(int schoolId, int catalogueId)
         {
             School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
             Catalogue catalogue = school.Catalogues.FirstOrDefault(c => c.Id == catalogueId);
             return catalogue.Students;
+        }
+
+        public void DeleteCatalogueStudent(Student student, int schoolId, int catalogueId)
+        {
+            School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
+            Catalogue catalogue = school.Catalogues.FirstOrDefault(c => c.Id == catalogueId);
+            catalogue.Students.Remove(student);
         }
 
         // Catalogue Courses
@@ -576,17 +615,26 @@ namespace E_LearningSite.API.Models
             }
             return course;
         }
+
         public Course GetCatalogueCourse(int id, int schoolId, int catalogueId)
         {
             School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
             Catalogue catalogue = school.Catalogues.FirstOrDefault(c => c.Id == catalogueId);
             return catalogue.Courses.FirstOrDefault(c => c.Id == id);
         }
+
         public ICollection<Course> GetAllCatalogueCourses(int schoolId, int catalogueId)
         {
             School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
             Catalogue catalogue = school.Catalogues.FirstOrDefault(c => c.Id == catalogueId);
             return catalogue.Courses;
+        }
+
+        public void DeleteCatalogueCourse(Course course, int schoolId, int catalogueId)
+        {
+            School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
+            Catalogue catalogue = school.Catalogues.FirstOrDefault(c => c.Id == catalogueId);
+            catalogue.Courses.Remove(course);
         }
 
         // Catalogue Grades
@@ -612,6 +660,25 @@ namespace E_LearningSite.API.Models
             School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
             Catalogue catalogue = school.Catalogues.FirstOrDefault(c => c.Id == catalogueId);
             return catalogue.Grades;
+        }
+        public void UpdateCatalogueGrade(Grade grade, GradeDTO gradeDTO, int schoolId)
+        {
+            School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
+            Student student = school.Students.FirstOrDefault(s => s.Id == gradeDTO.StudentId);
+            Course course = school.Courses.FirstOrDefault(c => c.Id == gradeDTO.CourseId);
+            Mentor mentor = school.Mentors.FirstOrDefault(m => m.Id == gradeDTO.MentorId);
+
+            grade.Student = student;
+            grade.Mark = gradeDTO.Mark;
+            grade.Course = course;
+            grade.Mentor = mentor;
+            grade.Date = gradeDTO.Date;
+        }
+        public void DeleteCatalogueGrade(Grade grade, int schoolId, int catalogueId)
+        {
+            School school = _schoolDatabase.FirstOrDefault(s => s.Id == schoolId);
+            Catalogue catalogue = school.Catalogues.FirstOrDefault(c => c.Id == catalogueId);
+            catalogue.Grades.Remove(grade);
         }
 
         // School Subjects

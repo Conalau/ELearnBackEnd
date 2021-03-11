@@ -1,4 +1,5 @@
-﻿using E_LearningSite.API.Models;
+﻿using E_LearningSite.API.DTOs;
+using E_LearningSite.API.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,7 @@ namespace E_LearningSite.API.Models
         Course GetCourse(int id, int schoolId);
         ICollection<Course> GetAllCourses(int schoolId);
         void UpdateCourse(Course course, CourseDTO courseDTO, int schoolId);
+        void DeleteCourse(Course course, int schoolId);
 
         // documents
         Document AddDocument(Document document, int schoolId, int courseId);
@@ -46,26 +48,33 @@ namespace E_LearningSite.API.Models
         Catalogue AddCatalogue(Catalogue catalogue, int schoolId);
         Catalogue GetCatalogue(int id, int schoolId);
         ICollection<Catalogue> GetAllCatalogues(int schoolId);
+        void UpdateCatalogue(Catalogue catalogue, CatalogueDTO catalogueDTO);
+        void DeleteCatalogue(Catalogue catalogue, int schoolId);
 
         // catalogue mentors
         Mentor AddCatalogueMentor(Mentor mentor, int schoolId, int catalogueId);
         Mentor GetCatalogueMentor(int id, int schoolId, int catalogueId);
         ICollection<Mentor> GetALLCatalogueMentors(int schoolId, int catalogueId);
+        void DeleteCatalogueMentor(Mentor mentor, int schoolId, int catalogueId);
 
         // catalogue students
         Student AddCatalogueStudent(Student student, int schoolId, int catalogueId);
         Student GetCatalogueStudent(int id, int schoolId, int catalogueId);
         ICollection<Student> GetAllCatalogueStudents(int schoolId, int catalogueId);
+        void DeleteCatalogueStudent(Student student, int schoolId, int catalogueId);
 
         // catalogue courses
         Course AddCatalogueCourse(Course course, int schoolId, int catalogueId);
         Course GetCatalogueCourse(int id, int schoolId, int catalogueId);
         ICollection<Course> GetAllCatalogueCourses(int schoolId, int catalogueId);
+        void DeleteCatalogueCourse(Course course, int schoolId, int catalogueId);
 
         // catalogue grades
         Grade AddCatalogueGrade(Grade grade, int schoolId, int catalogueId);
         Grade GetCatalogueGrade(int id, int schoolId, int catalogueId);
         ICollection<Grade> GetAllCatalogueGrades(int schoolId, int catalogueId);
+        void UpdateCatalogueGrade(Grade grade, GradeDTO gradeDTO, int schoolId);
+        void DeleteCatalogueGrade(Grade grade, int schoolId, int catalogueId);
 
         // subjects
         Subject AddSubject(Subject subject, int schoolId);

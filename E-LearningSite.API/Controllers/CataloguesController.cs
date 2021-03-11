@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using E_LearningSite.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,12 +20,14 @@ namespace E_LearningSite.API.Controllers
         }
 
         // Catalogues
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult GetCatalogues(int schoolId)
         {
             return Ok(_schoolRepository.GetAllCatalogues(schoolId));
         }
 
+        [AllowAnonymous]
         [HttpGet("{catalogueId}", Name = "GetCatalogue")]
         public IActionResult GetCatalogue(int schoolId, int catalogueId)
         {
@@ -35,6 +39,7 @@ namespace E_LearningSite.API.Controllers
             return Ok(catalogue);
         }
 
+        [Authorize(Roles = ("Admin, Principle"))]
         [HttpPost]
         public IActionResult CreateCatalogue(int schoolId, [FromBody] CatalogueDTO catalogueDTO)
         {
@@ -54,6 +59,7 @@ namespace E_LearningSite.API.Controllers
             return CreatedAtRoute("GetCatalogue", new { schoolId, catalogueId = catalogue.Id }, catalogue);
         }
 
+        [Authorize(Roles = ("Admin, Principle"))]
         [HttpPut("{catalogueId}")]
         public IActionResult UpdateCatalogue(int schoolId, [FromBody] CatalogueDTO catalogueDTO, int catalogueId)
         {
@@ -66,10 +72,11 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            catalogue.Name = catalogueDTO.Name;
+            _schoolRepository.UpdateCatalogue(catalogue, catalogueDTO);
             return NoContent();
         }
 
+        [Authorize(Roles = ("Admin, Principle"))]
         [HttpDelete("{catalogueId}")]
         public IActionResult DeleteCatalogue(int schoolId, int catalogueId)
         {
@@ -82,17 +89,20 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            _schoolRepository.GetAllCatalogues(schoolId).Remove(catalogue);
+            _schoolRepository.DeleteCatalogue(catalogue, schoolId);
             return NoContent();
         }
 
         // Catalogue Mentors
+
+        [AllowAnonymous]
         [HttpGet("{catalogueId}/mentors")]
         public IActionResult GetCatalogueMentors(int schoolId, int catalogueId)
         {
             return Ok(_schoolRepository.GetALLCatalogueMentors(schoolId, catalogueId));
         }
 
+        [AllowAnonymous]
         [HttpGet("{catalogueId}/mentors/{mentorId}", Name = "GetCatalogueMentor")]
         public IActionResult GetCatalogueMentor(int schoolId, int catalogueId, int mentorId)
         {
@@ -104,6 +114,7 @@ namespace E_LearningSite.API.Controllers
             return Ok(mentor);
         }
 
+        [Authorize(Roles ="Admin, Principle")]
         [HttpPost("{catalogueId}/mentors")]
         public IActionResult CreateCatalogueMentor(int schoolId, int catalogueId, [FromBody] CataloguePersonDTO cataloguePersonDTO)
         {
@@ -120,10 +131,11 @@ namespace E_LearningSite.API.Controllers
                     return Conflict(mentor.Name);
                 }
             }
-            catalogue.Mentors.Add(mentor);
+            _schoolRepository.AddCatalogueMentor(mentor, schoolId, catalogueId);
             return CreatedAtRoute("GetCatalogueMentor", new { schoolId, catalogueId, mentorId = mentor.Id }, mentor);
         }
 
+        [Authorize(Roles = "Admin, Principle")]
         [HttpDelete("{catalogueId}/mentors/{mentorId}")]
         public IActionResult DeleteCatalogueMentor(int schoolId, int catalogueId, int mentorId)
         {
@@ -136,17 +148,20 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            _schoolRepository.GetCatalogue(catalogueId, schoolId).Mentors.Remove(mentor);
+            _schoolRepository.DeleteCatalogueMentor(mentor, schoolId, catalogueId);
             return NoContent();
         }
 
         // Catalogue Students
+
+        [AllowAnonymous]
         [HttpGet("{catalogueId}/students")]
         public IActionResult GetCatalogueStudents(int schoolId, int catalogueId)
         {
             return Ok(_schoolRepository.GetAllCatalogueStudents(schoolId, catalogueId));
         }
 
+        [AllowAnonymous]
         [HttpGet("{catalogueId}/students/{studentId}", Name = "GetCatalogueStudent")]
         public IActionResult GetCatalogueStudent(int schoolId, int catalogueId, int studentId)
         {
@@ -158,6 +173,7 @@ namespace E_LearningSite.API.Controllers
             return Ok(student);
         }
 
+        [Authorize(Roles = ("Admin, Mentor"))]
         [HttpPost("{catalogueId}/students")]
         public IActionResult CreateCatalogueStudent(int schoolId, int catalogueId, [FromBody] CataloguePersonDTO cataloguePersonDTO)
         {
@@ -166,18 +182,22 @@ namespace E_LearningSite.API.Controllers
                 return BadRequest(ModelState);
             }
             Student student = _schoolRepository.GetStudent(cataloguePersonDTO.Id, schoolId);
-            Catalogue catalogue = _schoolRepository.GetCatalogue(catalogueId, schoolId);
-            foreach (Student stud in catalogue.Students)
+            List<Catalogue> catalogues = (List<Catalogue>)_schoolRepository.GetAllCatalogues(schoolId);
+            foreach (Catalogue catalogue in catalogues)
             {
-                if (stud.Id == student.Id)
+                foreach (Student stud in catalogue.Students)
                 {
-                    return Conflict(student.Name);
+                    if (stud.Id == student.Id)
+                    {
+                        return Conflict(student.Name);
+                    }
                 }
-            }
-            catalogue.Students.Add(student);
+            }            
+            _schoolRepository.AddCatalogueStudent(student, schoolId, catalogueId);
             return CreatedAtRoute("GetCatalogueStudent", new { schoolId, catalogueId, studentId = student.Id }, student);
         }
 
+        [Authorize(Roles = ("Admin, Mentor"))]
         [HttpDelete("{catalogueId}/students/{studentId}")]
         public IActionResult DeleteCatalogueStudent(int schoolId, int catalogueId, int studentId)
         {
@@ -190,17 +210,20 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            _schoolRepository.GetCatalogue(catalogueId, schoolId).Students.Remove(student);
+            _schoolRepository.DeleteCatalogueStudent(student, schoolId, catalogueId);
             return NoContent();
         }
 
         // Catalogue Courses
+
+        [AllowAnonymous]
         [HttpGet("{catalogueId}/courses")]
         public IActionResult GetCatalogueCourses(int schoolId, int catalogueId)
         {
             return Ok(_schoolRepository.GetAllCatalogueCourses(schoolId, catalogueId));
         }
 
+        [AllowAnonymous]
         [HttpGet("{catalogueId}/courses/{courseId}", Name = "GetCatalogueCourse")]
         public IActionResult GetCatalogueCourse(int schoolId, int catalogueId, int courseId)
         {
@@ -212,6 +235,7 @@ namespace E_LearningSite.API.Controllers
             return Ok(course);
         }
 
+        [Authorize(Roles = ("Admin, Mentor"))]
         [HttpPost("{catalogueId}/courses")]
         public IActionResult CreateCatalogueCourse(int schoolId, int catalogueId, [FromBody] CataloguePersonDTO cataloguePersonDTO)
         {
@@ -228,10 +252,11 @@ namespace E_LearningSite.API.Controllers
                     return Conflict(course.Name);
                 }
             }
-            catalogue.Courses.Add(course);
+            _schoolRepository.AddCatalogueCourse(course, schoolId, catalogueId);
             return CreatedAtRoute("GetCatalogueCourse", new { schoolId, catalogueId, courseId = course.Id }, course);
         }
 
+        [Authorize(Roles = ("Admin, Mentor"))]
         [HttpDelete("{catalogueId}/courses/{courseId}")]
         public IActionResult DeleteCatalogueCourse(int schoolId, int catalogueId, int courseId)
         {
@@ -244,17 +269,20 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            _schoolRepository.GetAllCatalogueCourses(schoolId, catalogueId).Remove(course);
+            _schoolRepository.DeleteCatalogueCourse(course, schoolId, catalogueId);
             return NoContent();
         }
 
         // Catalogue Grades
+
+        [AllowAnonymous]
         [HttpGet("{catalogueId}/grades")]
         public IActionResult GetCatalogueGrades(int schoolId, int catalogueId)
         {
             return Ok(_schoolRepository.GetAllCatalogueGrades(schoolId, catalogueId));
         }
 
+        [AllowAnonymous]
         [HttpGet("{catalogueId}/grades/{gradeId}", Name = "GetCatalogueGrade")]
         public IActionResult GetCatalogueGrade(int schoolId, int catalogueId, int gradeId)
         {
@@ -266,6 +294,7 @@ namespace E_LearningSite.API.Controllers
             return Ok(grade);
         }
 
+        [Authorize(Roles = ("Admin, Mentor"))]
         [HttpPost("{catalogueId}/grades")]
         public IActionResult CreateCatalogueGrade(int schoolId, int catalogueId, [FromBody] GradeDTO gradeDTO)
         {
@@ -289,6 +318,7 @@ namespace E_LearningSite.API.Controllers
                 new { schoolId, catalogueId, gradeId = grade.Id }, grade);
         }
 
+        [Authorize(Roles = ("Admin, Mentor"))]
         [HttpPut("{catalogueId}/grades/{gradeId}")]
         public IActionResult UpdateCatalogueGrade(int schoolId, int catalogueId, int gradeId,
             [FromBody] GradeDTO gradeDTO)
@@ -302,19 +332,12 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            Student student = _schoolRepository.GetStudent(gradeDTO.StudentId, schoolId);
-            Course course = _schoolRepository.GetCourse(gradeDTO.CourseId, schoolId);
-            Mentor mentor = _schoolRepository.GetMentor(gradeDTO.MentorId, schoolId);
-
-            grade.Student = student;
-            grade.Mark = gradeDTO.Mark;
-            grade.Course = course;
-            grade.Mentor = mentor;
-            grade.Date = gradeDTO.Date;
+            _schoolRepository.UpdateCatalogueGrade(grade, gradeDTO, schoolId);
 
             return NoContent();
         }
 
+        [Authorize(Roles = ("Admin, Mentor"))]
         [HttpDelete("{catalogueId}/grades/{gradeId}")]
         public IActionResult DeleteCatalogueGrade(int schoolId, int catalogueId, int gradeId)
         {
@@ -327,7 +350,7 @@ namespace E_LearningSite.API.Controllers
             {
                 return NotFound();
             }
-            _schoolRepository.GetAllCatalogueGrades(schoolId, catalogueId).Remove(grade);
+            _schoolRepository.DeleteCatalogueGrade(grade, schoolId, catalogueId);
             return NoContent();
         }
     }
